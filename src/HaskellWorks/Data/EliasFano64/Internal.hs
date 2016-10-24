@@ -10,8 +10,8 @@ module HaskellWorks.Data.EliasFano64.Internal
 
 import Data.Word
 import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Int.Widen
 import HaskellWorks.Data.Positioning
-import HaskellWorks.Data.Widen
 
 mkHiBits :: Count -> [Word64] -> [Bool]
 mkHiBits = mkHiBits' 0
