@@ -6,13 +6,13 @@ module HaskellWorks.Data.EliasFano64
   , ToEliasFano64(..)
   ) where
 
-import qualified Data.Vector.Storable                 as DVS
+import qualified Data.Vector.Storable                   as DVS
 import           Data.Word
 import           HaskellWorks.Data.AtIndex
 import           HaskellWorks.Data.Bits.BitWise
 import           HaskellWorks.Data.Bits.Log2
-import           HaskellWorks.Data.Bits.PackedVector  as PV
 import           HaskellWorks.Data.EliasFano64.Internal
+import           HaskellWorks.Data.PackedVector         as PV
 import           HaskellWorks.Data.Positioning
 import           HaskellWorks.Data.Take
 import           Safe

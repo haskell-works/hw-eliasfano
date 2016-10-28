@@ -1,5 +1,5 @@
 name:                   hw-eliasfano
-version:                0.1.0.0
+version:                0.1.0.1
 synopsis:               Elias-Fano
 description:            Please see README.md
 homepage:               http://github.com/haskell-works/hw-eliasfano#readme
@@ -20,6 +20,7 @@ library
   build-depends:        base                          >= 4          && < 5
                       , hw-bits                       >= 0.4.0.0
                       , hw-int                        >= 0.0.0.1
+                      , hw-packed-vector              >= 0.0.0.1
                       , hw-prim                       >= 0.4.0.0
                       , safe
                       , vector
