@@ -1,10 +1,13 @@
-resolver: lts-8.13
+resolver: lts-8.23
 
 packages:
 - '.'
 
 extra-deps:
-  - hedgehog-0.2
+  - hedgehog-0.5
+  - hw-hedgehog-0.1.0.0
+  - hw-hspec-hedgehog-0.1.0.0
+  - hw-packed-vector-0.0.0.1
 
 flags: {}
 
