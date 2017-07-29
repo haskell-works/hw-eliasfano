@@ -44,6 +44,7 @@ test-suite hw-eliasfano-test
                       , hw-hedgehog
                       , hw-hspec-hedgehog
                       , hw-int                        >= 0.0.0.1
+                      , hw-packed-vector
                       , hw-prim                       >= 0.4.0.0
                       , QuickCheck
                       , safe

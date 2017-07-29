@@ -21,11 +21,13 @@ import HaskellWorks.Data.ToListWord64
 import Prelude                        hiding (length, take)
 import Safe
 
+import qualified HaskellWorks.Data.PackedVector.PackedVector64 as PV
+
 data EliasFano = EliasFano
-  { efBucketBits :: [Bool]   -- 1 marks bucket, 0 marks skip to next
-  , efLoSegments :: [Word64] -- Lower segment of each entry
-  , efLoBitCount :: Count    -- Number of bits in each lower segment
-  , efCount      :: Count    -- Number of entries
+  { efBucketBits :: [Bool]            -- 1 marks bucket, 0 marks skip to next
+  , efLoSegments :: PV.PackedVector64 -- Lower segment of each entry
+  , efLoBitCount :: Count             -- Number of bits in each lower segment
+  , efCount      :: Count             -- Number of entries
   } deriving (Eq, Show)
 
 -- | Calculates ceil (n / d) for small numbers
@@ -54,7 +56,7 @@ instance FromListWord64 EliasFano where
   fromListWord64 ws = case lastMay ws of
     Just end' -> EliasFano
       { efBucketBits  = hiSegmentToBucketBits (bucketEnd - 1) his
-      , efLoSegments  = los
+      , efLoSegments  = PV.fromList loBits' los
       , efLoBitCount  = loBits'
       , efCount       = length'
       }
@@ -68,13 +70,13 @@ instance FromListWord64 EliasFano where
             bucketEnd = 1 .<. fromIntegral (finiteBitSize hiEnd - countLeadingZeros hiEnd) :: Word64
     Nothing -> EliasFano
       { efBucketBits  = []
-      , efLoSegments  = []
+      , efLoSegments  = PV.empty
       , efLoBitCount  = 0
       , efCount       = 0
       }
 
 instance ToListWord64 EliasFano where
-  toListWord64 ef = uncurry combine <$> zip (bucketBitsToHiSegment (efBucketBits ef)) (efLoSegments ef)
+  toListWord64 ef = uncurry combine <$> zip (bucketBitsToHiSegment (efBucketBits ef)) (PV.toList (efLoSegments ef))
     where combine hi lo = (hi .<. efLoBitCount ef) .|. lo
 
 -- instance AtIndex EliasFano where

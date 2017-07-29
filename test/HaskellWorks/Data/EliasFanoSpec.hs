@@ -8,8 +8,9 @@ import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
 
-import qualified Hedgehog.Gen   as G
-import qualified Hedgehog.Range as R
+import qualified HaskellWorks.Data.PackedVector.PackedVector64 as PV
+import qualified Hedgehog.Gen                                  as G
+import qualified Hedgehog.Range                                as R
 
 {-# ANN module ("HLint: Ignore Redundant do" :: String) #-}
 
@@ -34,7 +35,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
                             , True
                             , False
                             ]
-          , efLoSegments  = [2, 3, 1, 3, 3, 1, 0]
+          , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
           , efLoBitCount  = 2
           , efCount       = 7
           }
@@ -61,7 +62,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
                             , True
                             , False
                             ]
-          , efLoSegments  = [2, 3, 1, 3, 3, 1, 0]
+          , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
           , efLoBitCount  = 2
           , efCount       = 7
           }
