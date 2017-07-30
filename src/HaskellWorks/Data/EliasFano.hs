@@ -84,7 +84,7 @@ instance FromListWord64 EliasFano where
       , efCount       = length'
       }
       where length'   = length ws
-            loBits'   = fromIntegral (log2 ((end' + 2) `divup` length')) :: Count
+            loBits'   = fromIntegral (log2 (end' `divup` length')) :: Count
             hiMask    = maxBound .<. loBits' :: Word64
             loMask    = comp hiMask :: Word64
             his       = (.>. loBits') . (.&. hiMask) <$> ws

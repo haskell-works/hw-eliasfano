@@ -47,11 +47,11 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     actual === expected
   it "Round trip" $ require $ property $ do
     vs <- forAll $ G.list (R.linear 0 100) (G.word64 (R.linear 1 20))
-    let !_ = trace ("vs: " ++ show vs) ()
+    -- let !_ = trace ("vs: " ++ show vs) ()
     ws <- forAll $ pure $ drop 1 $ scanl (+) 0 vs
-    let !_ = trace ("ws: " ++ show ws) ()
+    -- let !_ = trace ("ws: " ++ show ws) ()
     ef :: EliasFano <- forAll $ pure $ fromListWord64 ws
-    let !_ = trace ("ef: " ++ show ef) ()
+    -- let !_ = trace ("ef: " ++ show ef) ()
     let actual = toListWord64 ef
-    let !_ = trace ("actual: " ++ show actual) ()
+    -- let !_ = trace ("actual: " ++ show actual) ()
     actual === (ws :: [Word64])
