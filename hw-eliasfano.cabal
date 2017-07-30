@@ -52,6 +52,31 @@ test-suite hw-eliasfano-test
   ghc-options:          -threaded -rtsopts -with-rtsopts=-N -Wall
   default-language:     Haskell2010
 
+benchmark bench
+    Type: exitcode-stdio-1.0
+    HS-Source-Dirs: bench
+    Main-Is: Main.hs
+    GHC-Options: -O2 -Wall -msse4.2
+    Default-Language: Haskell2010
+    Build-Depends:      base                          >= 4          && < 5
+                      , bytestring
+                      , criterion
+                      , hedgehog
+                      , hspec
+                      , hw-bits                       >= 0.4.0.0
+                      , hw-eliasfano
+                      , hw-hedgehog
+                      , hw-hspec-hedgehog
+                      , hw-int                        >= 0.0.0.1
+                      , hw-packed-vector
+                      , hw-prim                       >= 0.4.0.0
+                      , hw-rankselect-base
+                      , hw-rankselect
+                      , mmap
+                      , QuickCheck
+                      , safe
+                      , vector
+
 source-repository head
   type:     git
   location: https://github.com/haskell-works/hw-eliasfano

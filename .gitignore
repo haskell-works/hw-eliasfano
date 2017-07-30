@@ -20,7 +20,7 @@ cabal.sandbox.config
 /result
 /deps
 /*.json
-/*.json.ib
-/*.json.bp
+/*.ib
+/*.bp
 /snapshot.yaml
 /stack-ci.yaml

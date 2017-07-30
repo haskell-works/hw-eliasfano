@@ -43,6 +43,29 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     let actual = toListWord64 ws
     let expected = [2, 3, 5, 7, 11, 13, 24]
     actual === expected
+  it "List to EliasFano 2" $ require $ withTests 1 $ property $ do
+    let ws =  [    0,    5,    6,   14,   20,   29,   39,   51
+              ,   52,   60,   64,   71,   76,   87,   97,  103
+              ,  122,  135,  233,  245,  657,  662,  663,  671
+              ,  676,  684,  690,  701,  709,  725,  734,  755
+              ,  783,  796,  834,  841,  842,  845,  855,  861
+              ,  883,  888,  910,  917,  925,  936,  945,  962
+              ,  982,  998, 1019, 1028, 1029, 1040, 1044, 1048
+              , 1057, 1066, 1075, 1080, 1090, 1097, 1098, 1102
+              , 1117, 1121, 1136, 1141, 1142, 1148, 1157, 1167
+              , 1168, 1173, 1184, 1189, 1201, 1205, 1216, 1225
+              , 1226, 1231, 1244, 1249, 1250, 1253, 1257, 1262
+              , 1274, 1279, 1280, 1283, 1289, 1294, 1315, 1320
+              , 1321, 1324, 1330, 1335, 1346, 1351, 1352, 1355
+              , 1362, 1367, 1403, 1414, 1423, 1424, 1427, 1438
+              , 1446, 1447, 1452, 1477, 1482, 1483, 1486, 1493
+              , 1498, 1529, 1533, 1534, 1537, 1544, 1549, 1581
+              ]
+    let ef = fromListWord64 ws :: EliasFano
+    _ <- forAll $ pure ef
+    let actual = toListWord64 ef
+    let expected = ws
+    actual === expected
   it "Round trip" $ require $ property $ do
     vs <- forAll $ G.list (R.linear 0 100) (G.word64 (R.linear 1 20))
     ws <- forAll $ pure $ drop 1 $ scanl (+) 0 vs

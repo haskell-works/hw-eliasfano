@@ -26,10 +26,10 @@ import qualified Data.Vector.Storable                          as DVS
 import qualified HaskellWorks.Data.PackedVector.PackedVector64 as PV
 
 data EliasFano = EliasFano
-  { efBucketBits :: DVS.Vector Word64 -- 1 marks bucket, 0 marks skip to next
-  , efLoSegments :: PV.PackedVector64 -- Lower segment of each entry
-  , efLoBitCount :: Count             -- Number of bits in each lower segment
-  , efCount      :: Count             -- Number of entries
+  { efBucketBits :: !(DVS.Vector Word64)  -- 1 marks bucket, 0 marks skip to next
+  , efLoSegments :: !PV.PackedVector64    -- Lower segment of each entry
+  , efLoBitCount :: !Count                -- Number of bits in each lower segment
+  , efCount      :: !Count                -- Number of entries
   } deriving (Eq, Show)
 
 -- | Calculates ceil (n / d) for small numbers
