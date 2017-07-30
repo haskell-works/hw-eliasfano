@@ -50,7 +50,7 @@ bucketBoolsToBucketWords bs = DVS.unfoldrN ((P.length bs `div` 64) + 1) gen bs
 bucketWordsToBucketBools :: Count -> DVS.Vector Word64 -> [Bool]
 bucketWordsToBucketBools n v = fst (DVS.foldl go (id, n) v) []
   where go :: ([Bool] -> [Bool], Count) -> Word64 -> ([Bool] -> [Bool], Count)
-        go (bs, c) w | c > 0 = case goWord (c `min` 64) 64 w of
+        go (bs, c) w | c > 0 = case goWord c 64 w of
                                 (cs, finalCount) -> (bs . cs, finalCount)
         go (bs, _) _         = (bs, 0)
         goWord :: Count -> Count -> Word64 -> ([Bool] -> [Bool], Count)
