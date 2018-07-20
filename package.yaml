@@ -2,7 +2,7 @@ name: hw-eliasfano
 version: '0.1.0.1'
 synopsis: Elias-Fano
 description: Please see README.md
-category: Data, Conduit
+category: Data, Succinct Data Structures, Data Structures
 author: John Ky
 maintainer: newhoggy@gmail.com
 copyright: 2016 John Ky
