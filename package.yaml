@@ -9,9 +9,12 @@ copyright: 2016 John Ky
 license: BSD3
 github: haskell-works/hw-eliasfano
 homepage: http://github.com/haskell-works/hw-eliasfano#readme
+
 extra-source-files:
 - README.md
+
 ghc-options: -Wall
+
 dependencies:
 - base >=4 && <5
 - hw-bits >=0.4.0.0
@@ -19,6 +22,7 @@ dependencies:
 - hw-prim >=0.4.0.0
 - safe
 - vector
+
 library:
   source-dirs: src
   ghc-options:
@@ -30,6 +34,7 @@ library:
   - HaskellWorks.Data.ToListWord64
   dependencies:
   - hw-packed-vector >=0.0.0.1
+
 tests:
   hw-eliasfano-test:
     main: Spec.hs
@@ -46,6 +51,9 @@ tests:
     - hw-hspec-hedgehog
     - hw-packed-vector
     - QuickCheck
+    verbatim:
+      build-tool-depends: hspec-discover:hspec-discover
+
 benchmarks:
   bench:
     main: Main.hs
