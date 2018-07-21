@@ -6,3 +6,6 @@ packages:
 flags: {}
 
 extra-package-dbs: []
+
+extra-deps:
+  - hw-packed-vector-0.0.0.1
