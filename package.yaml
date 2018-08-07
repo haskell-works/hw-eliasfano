@@ -16,10 +16,10 @@ extra-source-files:
 ghc-options: -Wall
 
 dependencies:
-- base >=4 && <5
-- hw-bits >=0.4.0.0
-- hw-int >=0.0.0.1
-- hw-prim >=0.4.0.0
+- base      >= 4          && < 5
+- hw-bits   >= 0.4.0.0
+- hw-int    >= 0.0.0.1
+- hw-prim   >= 0.4.0.0
 - safe
 - vector
 
@@ -33,7 +33,7 @@ library:
   - HaskellWorks.Data.FromListWord64
   - HaskellWorks.Data.ToListWord64
   dependencies:
-  - hw-packed-vector >=0.0.0.1
+  - hw-packed-vector  >= 0.0.0.1
 
 tests:
   hw-eliasfano-test:
