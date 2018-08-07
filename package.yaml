@@ -63,7 +63,7 @@ benchmarks:
     - -msse4.2
     dependencies:
     - bytestring
-    - criterion
+    - criterion             >= 1.4.1.0    && < 1.6
     - hedgehog
     - hspec
     - hw-eliasfano
