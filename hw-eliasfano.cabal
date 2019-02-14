@@ -1,0 +1,97 @@
+name:           hw-eliasfano
+version:        0.1.0.1
+synopsis:       Elias-Fano
+description:    Please see README.md
+category:       Data, Succinct Data Structures, Data Structures
+homepage:       http://github.com/haskell-works/hw-eliasfano#readme
+bug-reports:    https://github.com/haskell-works/hw-eliasfano/issues
+author:         John Ky
+maintainer:     newhoggy@gmail.com
+copyright:      2016 John Ky
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/haskell-works/hw-eliasfano
+
+library
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -O2 -msse4.2
+  build-depends:
+      base >=4 && <5
+    , hw-bits >=0.4.0.0
+    , hw-int >=0.0.0.1
+    , hw-packed-vector >=0.0.0.1
+    , hw-prim >=0.4.0.0
+    , safe
+    , vector
+  exposed-modules:
+      HaskellWorks.Data.EliasFano
+      HaskellWorks.Data.FromListWord64
+      HaskellWorks.Data.ToListWord64
+  other-modules:
+      Paths_hw_eliasfano
+  default-language: Haskell2010
+
+test-suite hw-eliasfano-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4 && <5
+    , hedgehog
+    , hspec
+    , hw-bits >=0.4.0.0
+    , hw-eliasfano
+    , hw-hedgehog
+    , hw-hspec-hedgehog
+    , hw-int >=0.0.0.1
+    , hw-packed-vector
+    , hw-prim >=0.4.0.0
+    , safe
+    , vector
+  other-modules:
+      HaskellWorks.Data.EliasFano.Reference
+      HaskellWorks.Data.EliasFano.ReferenceSpec
+      HaskellWorks.Data.EliasFanoSpec
+      Paths_hw_eliasfano
+  default-language: Haskell2010
+  build-tool-depends: hspec-discover:hspec-discover
+
+benchmark bench
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  hs-source-dirs:
+      bench
+  ghc-options: -Wall -O2 -msse4.2
+  build-depends:
+      QuickCheck
+    , base >=4 && <5
+    , bytestring
+    , criterion
+    , hedgehog
+    , hspec
+    , hw-bits >=0.4.0.0
+    , hw-eliasfano
+    , hw-hedgehog
+    , hw-hspec-hedgehog
+    , hw-int >=0.0.0.1
+    , hw-packed-vector
+    , hw-prim >=0.4.0.0
+    , hw-rankselect
+    , hw-rankselect-base
+    , mmap
+    , safe
+    , vector
+  other-modules:
+      Paths_hw_eliasfano
+  default-language: Haskell2010
