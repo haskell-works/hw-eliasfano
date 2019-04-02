@@ -1,3 +1,5 @@
+cabal-version:  2.2
+
 name:           hw-eliasfano
 version:        0.1.0.1
 synopsis:       Elias-Fano
@@ -8,10 +10,9 @@ bug-reports:    https://github.com/haskell-works/hw-eliasfano/issues
 author:         John Ky
 maintainer:     newhoggy@gmail.com
 copyright:      2016 John Ky
-license:        BSD3
+license:        BSD-3-Clause
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
 extra-source-files:
     README.md
 
@@ -19,79 +20,95 @@ source-repository head
   type: git
   location: https://github.com/haskell-works/hw-eliasfano
 
+common base                 { build-depends: base               >= 4            &&  < 5 }
+
+common QuickCheck           { build-depends: QuickCheck                                 }
+common bytestring           { build-depends: bytestring                                 }
+common criterion            { build-depends: criterion                                  }
+common hedgehog             { build-depends: hedgehog                                   }
+common hspec                { build-depends: hspec                                      }
+common hw-bits              { build-depends: hw-bits            >= 0.4.0.0              }
+common hw-eliasfano         { build-depends: hw-eliasfano                               }
+common hw-hedgehog          { build-depends: hw-hedgehog                                }
+common hw-hspec-hedgehog    { build-depends: hw-hspec-hedgehog                          }
+common hw-int               { build-depends: hw-int             >= 0.0.0.1              }
+common hw-packed-vector     { build-depends: hw-packed-vector   >= 0.0.0.1              }
+common hw-prim              { build-depends: hw-prim            >= 0.4.0.0              }
+common hw-rankselect        { build-depends: hw-rankselect                              }
+common hw-rankselect-base   { build-depends: hw-rankselect-base                         }
+common mmap                 { build-depends: mmap                                       }
+common safe                 { build-depends: safe                                       }
+common vector               { build-depends: vector                                     }
+
+common common
+  ghc-options:        -Wall -O2 -msse4.2
+  default-language:   Haskell2010
+
 library
-  hs-source-dirs:
-      src
-  ghc-options: -Wall -O2 -msse4.2
-  build-depends:
-      base >=4 && <5
-    , hw-bits >=0.4.0.0
-    , hw-int >=0.0.0.1
-    , hw-packed-vector >=0.0.0.1
-    , hw-prim >=0.4.0.0
-    , safe
-    , vector
+  import:   base, common
+          , hw-bits
+          , hw-int
+          , hw-packed-vector
+          , hw-prim
+          , safe
+          , vector
   exposed-modules:
       HaskellWorks.Data.EliasFano
       HaskellWorks.Data.FromListWord64
       HaskellWorks.Data.ToListWord64
-  other-modules:
-      Paths_hw_eliasfano
-  default-language: Haskell2010
+  other-modules:      Paths_hw_eliasfano
+  autogen-modules:    Paths_hw_eliasfano
+  hs-source-dirs:     src
 
 test-suite hw-eliasfano-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  hs-source-dirs:
-      test
-  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      QuickCheck
-    , base >=4 && <5
-    , hedgehog
-    , hspec
-    , hw-bits >=0.4.0.0
-    , hw-eliasfano
-    , hw-hedgehog
-    , hw-hspec-hedgehog
-    , hw-int >=0.0.0.1
-    , hw-packed-vector
-    , hw-prim >=0.4.0.0
-    , safe
-    , vector
+  import:   base, common
+          , QuickCheck
+          , hedgehog
+          , hspec
+          , hw-bits
+          , hw-eliasfano
+          , hw-hedgehog
+          , hw-hspec-hedgehog
+          , hw-int
+          , hw-packed-vector
+          , hw-prim
+          , safe
+          , vector
+  type:               exitcode-stdio-1.0
+  main-is:            Spec.hs
+  hs-source-dirs:     test
+  ghc-options:        -Wall -threaded -rtsopts -with-rtsopts=-N
   other-modules:
       HaskellWorks.Data.EliasFano.Reference
       HaskellWorks.Data.EliasFano.ReferenceSpec
       HaskellWorks.Data.EliasFanoSpec
       Paths_hw_eliasfano
-  default-language: Haskell2010
+  autogen-modules:    Paths_hw_eliasfano
+  default-language:   Haskell2010
   build-tool-depends: hspec-discover:hspec-discover
 
 benchmark bench
-  type: exitcode-stdio-1.0
-  main-is: Main.hs
-  hs-source-dirs:
-      bench
-  ghc-options: -Wall -O2 -msse4.2
-  build-depends:
-      QuickCheck
-    , base >=4 && <5
-    , bytestring
-    , criterion
-    , hedgehog
-    , hspec
-    , hw-bits >=0.4.0.0
-    , hw-eliasfano
-    , hw-hedgehog
-    , hw-hspec-hedgehog
-    , hw-int >=0.0.0.1
-    , hw-packed-vector
-    , hw-prim >=0.4.0.0
-    , hw-rankselect
-    , hw-rankselect-base
-    , mmap
-    , safe
-    , vector
-  other-modules:
-      Paths_hw_eliasfano
-  default-language: Haskell2010
+  import:   base, common
+          , QuickCheck
+          , base
+          , bytestring
+          , criterion
+          , hedgehog
+          , hspec
+          , hw-bits
+          , hw-eliasfano
+          , hw-hedgehog
+          , hw-hspec-hedgehog
+          , hw-int
+          , hw-packed-vector
+          , hw-prim
+          , hw-rankselect
+          , hw-rankselect-base
+          , mmap
+          , safe
+          , vector
+  type:             exitcode-stdio-1.0
+  main-is:          Main.hs
+  hs-source-dirs:   bench
+  other-modules:    Paths_hw_eliasfano
+  autogen-modules:    Paths_hw_eliasfano

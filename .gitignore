@@ -24,3 +24,5 @@ cabal.sandbox.config
 /*.bp
 /snapshot.yaml
 /stack-ci.yaml
+/.ghc.environment.*
+
