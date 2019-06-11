@@ -22,23 +22,18 @@ source-repository head
 
 common base                 { build-depends: base               >= 4            &&  < 5 }
 
-common QuickCheck           { build-depends: QuickCheck                                 }
-common bytestring           { build-depends: bytestring                                 }
-common criterion            { build-depends: criterion                                  }
-common hedgehog             { build-depends: hedgehog                                   }
-common hspec                { build-depends: hspec                                      }
-common hw-bits              { build-depends: hw-bits            >= 0.4.0.0              }
-common hw-eliasfano         { build-depends: hw-eliasfano                               }
-common hw-hedgehog          { build-depends: hw-hedgehog                                }
-common hw-hspec-hedgehog    { build-depends: hw-hspec-hedgehog                          }
-common hw-int               { build-depends: hw-int             >= 0.0.0.1              }
-common hw-packed-vector     { build-depends: hw-packed-vector   >= 0.0.0.1              }
-common hw-prim              { build-depends: hw-prim            >= 0.4.0.0              }
-common hw-rankselect        { build-depends: hw-rankselect                              }
-common hw-rankselect-base   { build-depends: hw-rankselect-base                         }
-common mmap                 { build-depends: mmap                                       }
-common safe                 { build-depends: safe                                       }
-common vector               { build-depends: vector                                     }
+common bytestring           { build-depends: bytestring           >= 0.10.8.2   && < 0.11   }
+common criterion            { build-depends: criterion            >= 1.5.5.0    && < 1.6    }
+common hedgehog             { build-depends: hedgehog             >= 0.6        && < 1.1    }
+common hspec                { build-depends: hspec                >= 2.7.1      && < 3      }
+common hw-bits              { build-depends: hw-bits              >= 0.7.0.6    && < 0.8    }
+common hw-hedgehog          { build-depends: hw-hedgehog          >= 0.1.0.3    && < 0.2    }
+common hw-hspec-hedgehog    { build-depends: hw-hspec-hedgehog    >= 0.1.0.7    && < 0.2    }
+common hw-int               { build-depends: hw-int               >= 0.0.0.3    && < 0.1    }
+common hw-packed-vector     { build-depends: hw-packed-vector     >= 0.0.0.1    && < 0.1    }
+common hw-prim              { build-depends: hw-prim              >= 0.6.2.25   && < 0.7    }
+common mmap                 { build-depends: mmap                 >= 0.5.9      && < 0.6    }
+common vector               { build-depends: vector               >= 0.12.0.3   && < 0.13   }
 
 common common
   ghc-options:        -Wall -O2 -msse4.2
@@ -50,10 +45,10 @@ library
           , hw-int
           , hw-packed-vector
           , hw-prim
-          , safe
           , vector
   exposed-modules:
       HaskellWorks.Data.EliasFano
+      HaskellWorks.Data.EliasFano.Internal
       HaskellWorks.Data.FromListWord64
       HaskellWorks.Data.ToListWord64
   other-modules:      Paths_hw_eliasfano
@@ -62,22 +57,20 @@ library
 
 test-suite hw-eliasfano-test
   import:   base, common
-          , QuickCheck
           , hedgehog
           , hspec
           , hw-bits
-          , hw-eliasfano
           , hw-hedgehog
           , hw-hspec-hedgehog
           , hw-int
           , hw-packed-vector
           , hw-prim
-          , safe
           , vector
   type:               exitcode-stdio-1.0
   main-is:            Spec.hs
   hs-source-dirs:     test
   ghc-options:        -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:      hw-eliasfano
   other-modules:
       HaskellWorks.Data.EliasFano.Reference
       HaskellWorks.Data.EliasFano.ReferenceSpec
@@ -89,26 +82,22 @@ test-suite hw-eliasfano-test
 
 benchmark bench
   import:   base, common
-          , QuickCheck
           , base
           , bytestring
           , criterion
           , hedgehog
           , hspec
           , hw-bits
-          , hw-eliasfano
           , hw-hedgehog
           , hw-hspec-hedgehog
           , hw-int
           , hw-packed-vector
           , hw-prim
-          , hw-rankselect
-          , hw-rankselect-base
           , mmap
-          , safe
           , vector
-  type:             exitcode-stdio-1.0
-  main-is:          Main.hs
-  hs-source-dirs:   bench
-  other-modules:    Paths_hw_eliasfano
+  type:               exitcode-stdio-1.0
+  main-is:            Main.hs
+  hs-source-dirs:     bench
+  other-modules:      Paths_hw_eliasfano
+  build-depends:      hw-eliasfano
   autogen-modules:    Paths_hw_eliasfano

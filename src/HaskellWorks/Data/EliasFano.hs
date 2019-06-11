@@ -9,21 +9,21 @@ module HaskellWorks.Data.EliasFano
   , bucketBitsToHiSegment
   ) where
 
-import Data.Bits                        (countLeadingZeros, finiteBitSize)
+import Data.Bits                            (countLeadingZeros, finiteBitSize)
 import Data.Int
 import Data.Word
-import HaskellWorks.Data.AtIndex        hiding (end)
+import HaskellWorks.Data.AtIndex            hiding (end)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2
+import HaskellWorks.Data.EliasFano.Internal
 import HaskellWorks.Data.FromListWord64
 import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.ToListWord64
-import Prelude                          hiding (length, take)
-import Safe
+import Prelude                              hiding (length, take)
 
-import qualified Prelude as P
 import qualified Data.Vector.Storable                          as DVS
 import qualified HaskellWorks.Data.PackedVector.PackedVector64 as PV
+import qualified Prelude                                       as P
 
 data EliasFano = EliasFano
   { efBucketBits :: !(DVS.Vector Word64)  -- 1 marks bucket, 0 marks skip to next
@@ -45,7 +45,7 @@ bucketBoolsToBucketWords bs = DVS.unfoldrN ((P.length bs `div` 64) + 1) gen bs
         genWord :: [Bool] -> Count -> Word64 -> Maybe (Word64, [Bool])
         genWord (True :cs) i acc | i < 64 = genWord cs (i + 1) (acc .|. (1 .<. i))
         genWord (False:cs) i acc | i < 64 = genWord cs (i + 1)  acc
-        genWord        cs  _ acc          = Just (acc, cs)
+        genWord        cs  _ acc = Just (acc, cs)
 
 bucketWordsToBucketBools :: Count -> DVS.Vector Word64 -> [Bool]
 bucketWordsToBucketBools n v = fst (DVS.foldl go (id, n) v) []
@@ -76,7 +76,7 @@ bucketBitsToHiSegment = go 0
         go i (False: bs) =   go (i + 1) bs
 
 instance FromListWord64 EliasFano where
-  fromListWord64 ws = case lastMay ws of
+  fromListWord64 ws = case lastMaybe ws of
     Just end' -> EliasFano
       { efBucketBits  = bucketBoolsToBucketWords (hiSegmentToBucketBits (bucketEnd - 1) his)
       , efLoSegments  = PV.fromList loBits' los
