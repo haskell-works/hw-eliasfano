@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE FlexibleInstances #-}
 
 module HaskellWorks.Data.EliasFano
@@ -9,9 +10,11 @@ module HaskellWorks.Data.EliasFano
   , bucketBitsToHiSegment
   ) where
 
+import Control.DeepSeq
 import Data.Bits                            (countLeadingZeros, finiteBitSize)
 import Data.Int
 import Data.Word
+import GHC.Generics
 import HaskellWorks.Data.AtIndex            hiding (end)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2
@@ -30,7 +33,9 @@ data EliasFano = EliasFano
   , efLoSegments :: !PV.PackedVector64    -- Lower segment of each entry
   , efLoBitCount :: !Count                -- Number of bits in each lower segment
   , efCount      :: !Count                -- Number of entries
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
+
+instance NFData EliasFano
 
 -- | Calculates ceil (n / d) for small numbers
 divup :: Word64 -> Word64 -> Word64
