@@ -72,6 +72,6 @@ spec = describe "HaskellWorks.Data.EliasFano.ReferenceSpec" $ do
     actual === expected
   it "Round trip" $ require $ property $ do
     vs <- forAll $ G.list (R.linear 0 100) (G.word64 (R.linear 1 20))
-    ws <- forAll $ pure $ drop 1 $ scanl (+) (-1) vs
+    ws <- forAll $ pure $ drop 1 $ scanl (+) 0xffffffffffffffff vs
     ef :: EliasFano <- forAll $ pure $ fromListWord64 ws
     toListWord64 ef === (ws :: [Word64])

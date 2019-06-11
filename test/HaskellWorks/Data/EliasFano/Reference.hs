@@ -7,17 +7,17 @@ module HaskellWorks.Data.EliasFano.Reference
   , bucketBitsToHiSegment
   ) where
 
-import Data.Bits                      (countLeadingZeros, finiteBitSize)
+import Data.Bits                            (countLeadingZeros, finiteBitSize)
 import Data.Int
 import Data.Word
-import HaskellWorks.Data.AtIndex      hiding (end)
+import HaskellWorks.Data.AtIndex            hiding (end)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2
+import HaskellWorks.Data.EliasFano.Internal
 import HaskellWorks.Data.FromListWord64
 import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.ToListWord64
-import Prelude                        hiding (length, take)
-import Safe
+import Prelude                              hiding (length, take)
 
 data EliasFano = EliasFano
   { efBucketBits :: [Bool]   -- 1 marks bucket, 0 marks skip to next
@@ -38,8 +38,8 @@ hiSegmentToBucketBits lastWord = go 0
         go i []     | i >= lastWord = []
         go i (a:as) | i == a        = True:go i as
         go i (a:as) | i <  a        = False:go (i + 1) (a:as)
-        go i []                     = False:go (i + 1) []
-        go _ (_:_)                  = error "Invalid entry"
+        go i []     = False:go (i + 1) []
+        go _ (_:_)  = error "Invalid entry"
 
 bucketBitsToHiSegment :: [Bool] -> [Word64]
 bucketBitsToHiSegment = go 0
@@ -49,7 +49,7 @@ bucketBitsToHiSegment = go 0
         go i (False: bs) =   go (i + 1) bs
 
 instance FromListWord64 EliasFano where
-  fromListWord64 ws = case lastMay ws of
+  fromListWord64 ws = case lastMaybe ws of
     Just end' -> EliasFano
       { efBucketBits  = hiSegmentToBucketBits (bucketEnd - 1) his
       , efLoSegments  = los
