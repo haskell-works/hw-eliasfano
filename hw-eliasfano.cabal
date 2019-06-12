@@ -35,6 +35,8 @@ common hw-hspec-hedgehog    { build-depends: hw-hspec-hedgehog    >= 0.1.0.7    
 common hw-int               { build-depends: hw-int               >= 0.0.0.3    && < 0.1    }
 common hw-packed-vector     { build-depends: hw-packed-vector     >= 0.0.0.2    && < 0.1    }
 common hw-prim              { build-depends: hw-prim              >= 0.6.2.25   && < 0.7    }
+common hw-rankselect        { build-depends: hw-rankselect        >= 0.13       && < 0.14   }
+common hw-rankselect-base   { build-depends: hw-rankselect-base   >= 0.3.2.1    && < 0.4    }
 common lens                 { build-depends: lens                 >= 4          && < 5      }
 common mmap                 { build-depends: mmap                 >= 0.5.9      && < 0.6    }
 common optparse-applicative { build-depends: optparse-applicative >= 0.14       && < 0.15   }
@@ -53,6 +55,8 @@ library
           , hw-int
           , hw-packed-vector
           , hw-prim
+          , hw-rankselect
+          , hw-rankselect-base
           , vector
   exposed-modules:
       HaskellWorks.Data.EliasFano
