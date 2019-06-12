@@ -1,9 +1,9 @@
-{-# LANGUAGE BangPatterns         #-}
-{-# LANGUAGE ScopedTypeVariables  #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module HaskellWorks.Data.EliasFanoSpec (spec) where
 
 import Data.Word
+import HaskellWorks.Data.AtIndex
 import HaskellWorks.Data.EliasFano
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
@@ -72,3 +72,13 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     ef :: EliasFano <- forAll $ pure $ fromListWord64 ws
     let actual = toListWord64 ef
     actual === (ws :: [Word64])
+  it "atIndex" $ requireTest $ do
+    ef <- forAll $ pure $ EliasFano
+          { efBucketBits  = DVS.fromList [4443]
+          , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
+          , efLoBitCount  = 2
+          , efCount       = 7
+          }
+    let actual = fmap (atIndex ef) [0 .. end ef - 1]
+    let expected = [2, 3, 5, 7, 11, 13, 24]
+    actual === expected
