@@ -18,7 +18,7 @@ import qualified Hedgehog.Range                                as R
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
-  it "List to EliasFano" $ require $ withTests 1 $ property $ do
+  it "List to EliasFano" $ requireTest $ do
     ws <- forAll $ pure $ [2, 3, 5, 7, 11, 13, 24]
     let actual = fromListWord64 ws
     let expected = EliasFano
@@ -28,12 +28,12 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
           , efCount       = 7
           }
     actual === expected
-  it "hiSegment <-> bucketBits round trip" $ require $ property $ do
+  it "hiSegment <-> bucketBits round trip" $ requireProperty $ do
     vs <- forAll $ G.list (R.linear 1 100) (G.word64 (R.linear 0 20))
     ws <- forAll $ pure $ drop 1 $ scanl (+) 0 vs
     maxW <- forAll $ pure $ last ws
     bucketBitsToHiSegment (hiSegmentToBucketBits maxW ws) === ws
-  it "List to EliasFano" $ require $ withTests 1 $ property $ do
+  it "List to EliasFano" $ requireTest $ do
     ws <- forAll $ pure $ EliasFano
           { efBucketBits  = DVS.fromList [4443]
           , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
@@ -43,7 +43,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     let actual = toListWord64 ws
     let expected = [2, 3, 5, 7, 11, 13, 24]
     actual === expected
-  it "List to EliasFano 2" $ require $ withTests 1 $ property $ do
+  it "List to EliasFano 2" $ requireTest $ do
     let ws =  [    0,    5,    6,   14,   20,   29,   39,   51
               ,   52,   60,   64,   71,   76,   87,   97,  103
               ,  122,  135,  233,  245,  657,  662,  663,  671
@@ -66,7 +66,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     let actual = toListWord64 ef
     let expected = ws
     actual === expected
-  it "Round trip" $ require $ property $ do
+  it "Round trip" $ requireProperty $ do
     vs <- forAll $ G.list (R.linear 0 100) (G.word64 (R.linear 1 20))
     ws <- forAll $ pure $ drop 1 $ scanl (+) 0 vs
     ef :: EliasFano <- forAll $ pure $ fromListWord64 ws
