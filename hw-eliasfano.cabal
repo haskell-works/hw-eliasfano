@@ -60,6 +60,7 @@ library
           , vector
   exposed-modules:
       HaskellWorks.Data.EliasFano
+      HaskellWorks.Data.EliasFano.Internal
       HaskellWorks.Data.FromListWord64
       HaskellWorks.Data.ToListWord64
   other-modules:      Paths_hw_eliasfano
