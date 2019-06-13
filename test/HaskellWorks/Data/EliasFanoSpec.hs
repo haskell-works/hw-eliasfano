@@ -5,6 +5,7 @@ module HaskellWorks.Data.EliasFanoSpec (spec) where
 import Data.Word
 import HaskellWorks.Data.AtIndex
 import HaskellWorks.Data.EliasFano
+import HaskellWorks.Data.EliasFano.Internal
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
