@@ -20,7 +20,7 @@ import GHC.Generics
 import HaskellWorks.Data.AtIndex                 hiding (end)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2
-import HaskellWorks.Data.EliasFano.Internal
+import HaskellWorks.Data.Foldable
 import HaskellWorks.Data.FromListWord64
 import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.RankSelect.Base.Select1
@@ -87,7 +87,7 @@ bucketBitsToHiSegment = go 0
         go i (False: bs) =   go (i + 1) bs
 
 instance FromListWord64 EliasFano where
-  fromListWord64 ws = case lastMaybe ws of
+  fromListWord64 ws = case foldLast ws of
     Just end' -> EliasFano
       { efBucketBits  = bucketBoolsToBucketWords (hiSegmentToBucketBits (bucketEnd - 1) his)
       , efLoSegments  = PV.fromList loBits' los
