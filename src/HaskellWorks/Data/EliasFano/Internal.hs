@@ -8,6 +8,7 @@ module HaskellWorks.Data.EliasFano.Internal
   , bucketBitsToHiSegment
   , bucketBoolsToBucketWords
   , bucketWordsToBucketBools
+  , hiSegmentToBucketWords
   ) where
 
 import Data.Int
@@ -45,6 +46,9 @@ bucketWordsToBucketBools n v = fst (DVS.foldl go (id, n) v) []
                                         in case goWord (if b then c - 1 else c) (i - 1) (w .>. 1) of
                                               (bs, finalCount) -> ((b:) . bs, finalCount)
         goWord c _ _                  = (id, c)
+
+hiSegmentToBucketWords :: Word64 -> [Word64] -> DVS.Vector Word64
+hiSegmentToBucketWords bucketLast his = bucketBoolsToBucketWords (hiSegmentToBucketBits bucketLast his)
 
 hiSegmentToBucketBits :: Word64 -> [Word64] -> [Bool]
 hiSegmentToBucketBits lastWord = go 0

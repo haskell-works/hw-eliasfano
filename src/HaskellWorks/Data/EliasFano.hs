@@ -42,7 +42,7 @@ size = efCount
 instance FromListWord64 EliasFano where
   fromListWord64 ws = case foldLast ws of
     Just end' -> EliasFano
-      { efBucketBits  = bucketBoolsToBucketWords (hiSegmentToBucketBits (bucketEnd - 1) his)
+      { efBucketBits  = hiSegmentToBucketWords (bucketEnd - 1) his
       , efLoSegments  = PV.fromList loBits' los
       , efLoBitCount  = loBits'
       , efCount       = length'
