@@ -9,7 +9,6 @@ import Foreign                             hiding ((.&.))
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.EliasFano
 import HaskellWorks.Data.FromForeignRegion
-import HaskellWorks.Data.PackedVector
 import System.Environment
 import System.IO.MMap
 
@@ -31,17 +30,13 @@ encode filename = do
   !ibFr  <- mmapFileForeignPtr filename ReadOnly Nothing
   let !ib  = fromForeignRegion ibFr  :: DVS.Vector Word64
   let !positions = getPositions ib
-  let !ef = fromListWord64 positions :: EliasFano
-  putStrLn $ "Position count: " <> show (efCount ef)
-  putStrLn $ "bucket size: " <> show (8 * DVS.length (efBucketBits ef))
-  putStrLn $ "lo size: " <> show (8 * DVS.length (swBuffer (efLoSegments ef)))
-  putStrLn $ "efLoBitCount: " <> show (efLoBitCount ef)
+  let !_ = fromListWord64 positions :: EliasFano
   return ()
 
 loadBitString :: FilePath -> IO BS.ByteString
 loadBitString filepath = do
-  (fptr :: ForeignPtr Word8, offset, size) <- mmapFileForeignPtr filepath ReadOnly Nothing
-  let !bs = BSI.fromForeignPtr (castForeignPtr fptr) offset size
+  (fptr :: ForeignPtr Word8, offset, sz) <- mmapFileForeignPtr filepath ReadOnly Nothing
+  let !bs = BSI.fromForeignPtr (castForeignPtr fptr) offset sz
   return bs
 
 benchEliasFano :: [Benchmark]

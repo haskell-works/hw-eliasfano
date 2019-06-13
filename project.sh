@@ -17,7 +17,7 @@ case "$cmd" in
 
   build)
     cabal new-build all -j8 \
-      --disable-tests --disable-benchmarks \
+      --enable-tests --enable-benchmarks \
       $CABAL_FLAGS "$@"
     ;;
   
@@ -31,7 +31,7 @@ case "$cmd" in
     ;;
 
   bench)
-    cabal new-bench -j8 \
+    cabal new-bench --enable-benchmarks -j8 \
       $CABAL_FLAGS "$@"
     ;;
 
