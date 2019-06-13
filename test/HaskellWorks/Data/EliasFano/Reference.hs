@@ -7,17 +7,17 @@ module HaskellWorks.Data.EliasFano.Reference
   , bucketBitsToHiSegment
   ) where
 
-import Data.Bits                            (countLeadingZeros, finiteBitSize)
+import Data.Bits                        (countLeadingZeros, finiteBitSize)
 import Data.Int
 import Data.Word
-import HaskellWorks.Data.AtIndex            hiding (end)
+import HaskellWorks.Data.AtIndex        hiding (end)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2
-import HaskellWorks.Data.EliasFano.Internal
+import HaskellWorks.Data.Foldable
 import HaskellWorks.Data.FromListWord64
 import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.ToListWord64
-import Prelude                              hiding (length, take)
+import Prelude                          hiding (length, take)
 
 data EliasFano = EliasFano
   { efBucketBits :: [Bool]   -- 1 marks bucket, 0 marks skip to next
@@ -49,7 +49,7 @@ bucketBitsToHiSegment = go 0
         go i (False: bs) =   go (i + 1) bs
 
 instance FromListWord64 EliasFano where
-  fromListWord64 ws = case lastMaybe ws of
+  fromListWord64 ws = case foldLast ws of
     Just end' -> EliasFano
       { efBucketBits  = hiSegmentToBucketBits (bucketEnd - 1) his
       , efLoSegments  = los
