@@ -17,7 +17,6 @@ import HaskellWorks.Data.AtIndex                 hiding (end)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2
 import HaskellWorks.Data.EliasFano.Internal
-import HaskellWorks.Data.Foldable
 import HaskellWorks.Data.FromListWord64
 import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.RankSelect.Base.Select1
@@ -40,9 +39,9 @@ size :: EliasFano -> Count
 size = efCount
 
 instance FromListWord64 EliasFano where
-  fromListWord64 ws = case foldLast ws of
-    Just end' -> EliasFano
-      { efBucketBits  = hiSegmentToBucketWords (bucketEnd - 1) his
+  fromListWord64 ws = case foldCountAndLast ws of
+    (Just end', count) -> EliasFano
+      { efBucketBits  = DVS.fromList $ hiSegmentToWords his
       , efLoSegments  = PV.fromList loBits' los
       , efLoBitCount  = loBits'
       , efCount       = length'
@@ -55,7 +54,7 @@ instance FromListWord64 EliasFano where
             los       = (.&. loMask) <$> ws
             hiEnd     = end' .>. loBits'
             bucketEnd = 1 .<. fromIntegral (finiteBitSize hiEnd - countLeadingZeros hiEnd) :: Word64
-    Nothing -> EliasFano
+    (Nothing, _) -> EliasFano
       { efBucketBits  = DVS.empty
       , efLoSegments  = PV.empty
       , efLoBitCount  = 0

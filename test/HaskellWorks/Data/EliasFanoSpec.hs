@@ -4,6 +4,7 @@ module HaskellWorks.Data.EliasFanoSpec (spec) where
 
 import Data.Word
 import HaskellWorks.Data.AtIndex
+import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.EliasFano
 import HaskellWorks.Data.EliasFano.Internal
 import HaskellWorks.Hspec.Hedgehog
@@ -83,3 +84,11 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     let actual = fmap (atIndex ef) [0 .. end ef - 1]
     let expected = [2, 3, 5, 7, 11, 13, 24]
     actual === expected
+  it "hiSegmentToWords" $ requireTest $ do
+    ws <- forAll $ pure $ [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
+
+    filter (/= ' ') (bitShow (hiSegmentToWords ws)) === concat
+      [ "01101010", "01000100", "00010000", "00001000", "00000000", "00100000", "00000000", "00000000"
+      , "10000000", "00000000", "00000000", "00000000", "00010000", "00000000", "00000000", "00000000"
+      , "00000000", "00000000", "00000000", "00010000", "00000000", "00000000", "00000000", "00000000"
+      ]

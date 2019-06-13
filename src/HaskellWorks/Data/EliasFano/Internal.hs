@@ -8,7 +8,8 @@ module HaskellWorks.Data.EliasFano.Internal
   , bucketBitsToHiSegment
   , bucketBoolsToBucketWords
   , bucketWordsToBucketBools
-  , hiSegmentToBucketWords
+  , hiSegmentToWords
+  , foldCountAndLast
   ) where
 
 import Data.Int
@@ -19,6 +20,12 @@ import Prelude                        hiding (length, take)
 
 import qualified Data.Vector.Storable as DVS
 import qualified Prelude              as P
+
+foldCountAndLast :: Foldable t => t a -> (Maybe a, Count)
+foldCountAndLast = foldl go (Nothing, 0)
+  where go :: (Maybe a, Count) -> a -> (Maybe a, Count)
+        go (_, n) a = (Just a, n + 1)
+{-# INLINE foldCountAndLast #-}
 
 -- | Calculates ceil (n / d) for small numbers
 divup :: Word64 -> Word64 -> Word64
@@ -47,8 +54,16 @@ bucketWordsToBucketBools n v = fst (DVS.foldl go (id, n) v) []
                                               (bs, finalCount) -> ((b:) . bs, finalCount)
         goWord c _ _                  = (id, c)
 
-hiSegmentToBucketWords :: Word64 -> [Word64] -> DVS.Vector Word64
-hiSegmentToBucketWords bucketLast his = bucketBoolsToBucketWords (hiSegmentToBucketBits bucketLast his)
+hiSegmentToWords :: [Word64] -> [Word64]
+hiSegmentToWords = go 0 0 0
+  where go :: Count -> Word64 -> Word64 -> [Word64] -> [Word64]
+        go n acc last us@(v:vs) = if n < 64
+          then if last < v
+            then go (n + 1)  acc                (last + 1) us
+            else go (n + 1) (acc .|. (1 .<. n))  v         vs
+          else acc:go 0 0 last us
+        go 0 _   _    _         = []
+        go _ acc _    _         = [acc]
 
 hiSegmentToBucketBits :: Word64 -> [Word64] -> [Bool]
 hiSegmentToBucketBits lastWord = go 0
