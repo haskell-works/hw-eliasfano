@@ -3,21 +3,21 @@
 module HaskellWorks.Data.EliasFano.Reference
   ( EliasFano(..)
   , divup
+  , fromListWord64
+  , toListWord64
   , hiSegmentToBucketBits
   , bucketBitsToHiSegment
   ) where
 
-import Data.Bits                        (countLeadingZeros, finiteBitSize)
+import Data.Bits                      (countLeadingZeros, finiteBitSize)
 import Data.Int
 import Data.Word
-import HaskellWorks.Data.AtIndex        hiding (end)
+import HaskellWorks.Data.AtIndex      hiding (end)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2
 import HaskellWorks.Data.Foldable
-import HaskellWorks.Data.FromListWord64
 import HaskellWorks.Data.Positioning
-import HaskellWorks.Data.ToListWord64
-import Prelude                          hiding (length, take)
+import Prelude                        hiding (length, take)
 
 data EliasFano = EliasFano
   { efBucketBits :: [Bool]   -- 1 marks bucket, 0 marks skip to next
@@ -48,35 +48,29 @@ bucketBitsToHiSegment = go 0
         go i (True:bs)   = i:go  i      bs
         go i (False: bs) =   go (i + 1) bs
 
-instance FromListWord64 EliasFano where
-  fromListWord64 ws = case foldLast ws of
-    Just end' -> EliasFano
-      { efBucketBits  = hiSegmentToBucketBits (bucketEnd - 1) his
-      , efLoSegments  = los
-      , efLoBitCount  = loBits'
-      , efCount       = length'
-      }
-      where length'   = length ws
-            loBits'   = fromIntegral (log2 ((end' + 2) `divup` length')) :: Count
-            hiMask    = maxBound .<. loBits' :: Word64
-            loMask    = comp hiMask :: Word64
-            his       = (.>. loBits') . (.&. hiMask) <$> ws
-            los       = (.&. loMask) <$> ws
-            hiEnd     = end' .>. loBits'
-            bucketEnd = 1 .<. fromIntegral (finiteBitSize hiEnd - countLeadingZeros hiEnd) :: Word64
-    Nothing -> EliasFano
-      { efBucketBits  = []
-      , efLoSegments  = []
-      , efLoBitCount  = 0
-      , efCount       = 0
-      }
+fromListWord64 :: [Word64] -> EliasFano
+fromListWord64 ws = case foldLast ws of
+  Just end' -> EliasFano
+    { efBucketBits  = hiSegmentToBucketBits (bucketEnd - 1) his
+    , efLoSegments  = los
+    , efLoBitCount  = loBits'
+    , efCount       = length'
+    }
+    where length'   = length ws
+          loBits'   = fromIntegral (log2 ((end' + 2) `divup` length')) :: Count
+          hiMask    = maxBound .<. loBits' :: Word64
+          loMask    = comp hiMask :: Word64
+          his       = (.>. loBits') . (.&. hiMask) <$> ws
+          los       = (.&. loMask) <$> ws
+          hiEnd     = end' .>. loBits'
+          bucketEnd = 1 .<. fromIntegral (finiteBitSize hiEnd - countLeadingZeros hiEnd) :: Word64
+  Nothing -> EliasFano
+    { efBucketBits  = []
+    , efLoSegments  = []
+    , efLoBitCount  = 0
+    , efCount       = 0
+    }
 
-instance ToListWord64 EliasFano where
-  toListWord64 ef = uncurry combine <$> zip (bucketBitsToHiSegment (efBucketBits ef)) (efLoSegments ef)
-    where combine hi lo = (hi .<. efLoBitCount ef) .|. lo
-
--- instance AtIndex EliasFano where
---   (!!!)   v i = v !! fromIntegral i
---   atIndex v i = v !! fromIntegral i
---   {-# INLINE (!!!)   #-}
---   {-# INLINE atIndex #-}
+toListWord64 :: EliasFano -> [Word64]
+toListWord64 ef = uncurry combine <$> zip (bucketBitsToHiSegment (efBucketBits ef)) (efLoSegments ef)
+  where combine hi lo = (hi .<. efLoBitCount ef) .|. lo
