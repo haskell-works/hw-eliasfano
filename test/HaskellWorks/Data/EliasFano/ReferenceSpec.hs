@@ -4,8 +4,6 @@ module HaskellWorks.Data.EliasFano.ReferenceSpec (spec) where
 
 import Data.Word
 import HaskellWorks.Data.EliasFano.Reference
-import HaskellWorks.Data.FromListWord64
-import HaskellWorks.Data.ToListWord64
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
