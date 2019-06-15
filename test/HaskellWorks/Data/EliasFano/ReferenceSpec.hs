@@ -17,7 +17,7 @@ spec :: Spec
 spec = describe "HaskellWorks.Data.EliasFano.ReferenceSpec" $ do
   it "List to EliasFano" $ require $ withTests 1 $ property $ do
     ws <- forAll $ pure $ [2, 3, 5, 7, 11, 13, 24]
-    let actual = fromListWord64 ws
+    let actual = fromWord64s ws
     let expected = EliasFano
           { efBucketBits  = [ True
                             , True
@@ -65,11 +65,11 @@ spec = describe "HaskellWorks.Data.EliasFano.ReferenceSpec" $ do
           , efLoBitCount  = 2
           , efCount       = 7
           }
-    let actual = toListWord64 ws
+    let actual = toWord64s ws
     let expected = [2, 3, 5, 7, 11, 13, 24]
     actual === expected
   it "Round trip" $ require $ property $ do
     vs <- forAll $ G.list (R.linear 0 100) (G.word64 (R.linear 1 20))
     ws <- forAll $ pure $ drop 1 $ scanl (+) 0xffffffffffffffff vs
-    ef :: EliasFano <- forAll $ pure $ fromListWord64 ws
-    toListWord64 ef === (ws :: [Word64])
+    ef :: EliasFano <- forAll $ pure $ fromWord64s ws
+    toWord64s ef === (ws :: [Word64])

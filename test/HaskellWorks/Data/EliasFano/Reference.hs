@@ -3,8 +3,8 @@
 module HaskellWorks.Data.EliasFano.Reference
   ( EliasFano(..)
   , divup
-  , fromListWord64
-  , toListWord64
+  , fromWord64s
+  , toWord64s
   , hiSegmentToBucketBits
   , bucketBitsToHiSegment
   ) where
@@ -48,8 +48,8 @@ bucketBitsToHiSegment = go 0
         go i (True:bs)   = i:go  i      bs
         go i (False: bs) =   go (i + 1) bs
 
-fromListWord64 :: [Word64] -> EliasFano
-fromListWord64 ws = case foldLast ws of
+fromWord64s :: [Word64] -> EliasFano
+fromWord64s ws = case foldLast ws of
   Just end' -> EliasFano
     { efBucketBits  = hiSegmentToBucketBits (bucketEnd - 1) his
     , efLoSegments  = los
@@ -71,6 +71,6 @@ fromListWord64 ws = case foldLast ws of
     , efCount       = 0
     }
 
-toListWord64 :: EliasFano -> [Word64]
-toListWord64 ef = uncurry combine <$> zip (bucketBitsToHiSegment (efBucketBits ef)) (efLoSegments ef)
+toWord64s :: EliasFano -> [Word64]
+toWord64s ef = uncurry combine <$> zip (bucketBitsToHiSegment (efBucketBits ef)) (efLoSegments ef)
   where combine hi lo = (hi .<. efLoBitCount ef) .|. lo

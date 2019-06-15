@@ -30,7 +30,7 @@ encode filename = do
   !ibFr  <- mmapFileForeignPtr filename ReadOnly Nothing
   let !ib  = fromForeignRegion ibFr  :: DVS.Vector Word64
   let !positions = getPositions ib
-  let !_ = fromListWord64 positions :: EliasFano
+  let !_ = fromWord64s positions :: EliasFano
   return ()
 
 loadBitString :: FilePath -> IO BS.ByteString
