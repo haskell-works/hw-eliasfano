@@ -6,6 +6,7 @@ module HaskellWorks.Data.EliasFano
   ( EliasFano(..)
   , fromWord64s
   , toWord64s
+  , empty
   , size
   ) where
 
@@ -36,6 +37,14 @@ instance NFData EliasFano
 size :: EliasFano -> Count
 size = efCount
 
+empty :: EliasFano
+empty = EliasFano
+  { efBucketBits  = DVS.empty
+  , efLoSegments  = PV.empty
+  , efLoBitCount  = 0
+  , efCount       = 0
+  }
+
 fromWord64s :: [Word64] -> EliasFano
 fromWord64s ws = case foldCountAndLast ws of
   (Just end', count) -> EliasFano
@@ -52,12 +61,7 @@ fromWord64s ws = case foldCountAndLast ws of
           los       = (.&. loMask) <$> ws
           hiEnd     = end' .>. loBits'
           bucketEnd = 1 .<. fromIntegral (finiteBitSize hiEnd - countLeadingZeros hiEnd) :: Word64
-  (Nothing, _) -> EliasFano
-    { efBucketBits  = DVS.empty
-    , efLoSegments  = PV.empty
-    , efLoBitCount  = 0
-    , efCount       = 0
-    }
+  (Nothing, _) -> empty
 
 toWord64s :: EliasFano -> [Word64]
 toWord64s ef = uncurry combine <$> zip (bucketBitsToHiSegment bucketBits) (PV.toList (efLoSegments ef))
