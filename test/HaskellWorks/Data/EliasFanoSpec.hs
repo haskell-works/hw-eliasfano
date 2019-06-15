@@ -22,7 +22,7 @@ spec :: Spec
 spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
   it "List to EliasFano" $ requireTest $ do
     ws <- forAll $ pure $ [2, 3, 5, 7, 11, 13, 24]
-    let actual = fromListWord64 ws
+    let actual = fromWord64s ws
     let expected = EliasFano
           { efBucketBits  = DVS.fromList [4443]
           , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
@@ -42,7 +42,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
           , efLoBitCount  = 2
           , efCount       = 7
           }
-    let actual = toListWord64 ws
+    let actual = toWord64s ws
     let expected = [2, 3, 5, 7, 11, 13, 24]
     actual === expected
   it "List to EliasFano 2" $ requireTest $ do
@@ -63,16 +63,16 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
               , 1446, 1447, 1452, 1477, 1482, 1483, 1486, 1493
               , 1498, 1529, 1533, 1534, 1537, 1544, 1549, 1581
               ]
-    let ef = fromListWord64 ws :: EliasFano
+    let ef = fromWord64s ws :: EliasFano
     _ <- forAll $ pure ef
-    let actual = toListWord64 ef
+    let actual = toWord64s ef
     let expected = ws
     actual === expected
   it "Round trip" $ requireProperty $ do
     vs <- forAll $ G.list (R.linear 0 100) (G.word64 (R.linear 1 20))
     ws <- forAll $ pure $ drop 1 $ scanl (+) 0 vs
-    ef :: EliasFano <- forAll $ pure $ fromListWord64 ws
-    let actual = toListWord64 ef
+    ef :: EliasFano <- forAll $ pure $ fromWord64s ws
+    let actual = toWord64s ef
     actual === (ws :: [Word64])
   it "atIndex" $ requireTest $ do
     ef <- forAll $ pure $ EliasFano

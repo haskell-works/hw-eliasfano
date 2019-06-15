@@ -37,7 +37,7 @@ runLoadSave :: Z.LoadSaveOptions -> IO ()
 runLoadSave opts = do
   lbs <- LBS.readFile (opts ^. the @"input")
   let ws = fmap fromIntegral (decodeWord32s lbs) :: [Word64]
-  let ef = EF.fromListWord64 ws :: EF.EliasFano
+  let ef = EF.fromWord64s ws :: EF.EliasFano
   -- let x = DVS.length (PV.swBuffer (EF.efCount ef))
   IO.putStrLn $ "Eliasfano:"
     <> " bits: "  <> show (ef & EF.efBucketBits & DVS.length                )
