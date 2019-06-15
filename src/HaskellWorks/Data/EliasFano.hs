@@ -5,13 +5,13 @@
 module HaskellWorks.Data.EliasFano
   ( EliasFano(..)
   , fromWord64s
+  , fromWord64sWithLastAndCount
   , toWord64s
   , empty
   , size
   ) where
 
 import Control.DeepSeq
-import Data.Bits                                 (countLeadingZeros, finiteBitSize)
 import Data.Word
 import GHC.Generics
 import HaskellWorks.Data.AtIndex                 hiding (end)
@@ -45,23 +45,23 @@ empty = EliasFano
   , efCount       = 0
   }
 
+fromWord64sWithLastAndCount :: Word64 -> Count -> [Word64] -> EliasFano
+fromWord64sWithLastAndCount lst count ws = EliasFano
+  { efBucketBits  = DVS.fromList $ hiSegmentToWords his
+  , efLoSegments  = PV.fromListN count loBits' los
+  , efLoBitCount  = loBits'
+  , efCount       = count
+  }
+  where loBits'   = fromIntegral (log2 (lst `divup` fromIntegral count)) :: Count
+        hiMask    = maxBound .<. loBits' :: Word64
+        loMask    = comp hiMask :: Word64
+        his       = (.>. loBits') . (.&. hiMask) <$> ws
+        los       = (.&. loMask) <$> ws
+
 fromWord64s :: [Word64] -> EliasFano
 fromWord64s ws = case foldCountAndLast ws of
-  (Just end', count) -> EliasFano
-    { efBucketBits  = DVS.fromList $ hiSegmentToWords his
-    , efLoSegments  = PV.fromList loBits' los
-    , efLoBitCount  = loBits'
-    , efCount       = length'
-    }
-    where length'   = length ws
-          loBits'   = fromIntegral (log2 (end' `divup` length')) :: Count
-          hiMask    = maxBound .<. loBits' :: Word64
-          loMask    = comp hiMask :: Word64
-          his       = (.>. loBits') . (.&. hiMask) <$> ws
-          los       = (.&. loMask) <$> ws
-          hiEnd     = end' .>. loBits'
-          bucketEnd = 1 .<. fromIntegral (finiteBitSize hiEnd - countLeadingZeros hiEnd) :: Word64
-  (Nothing, _) -> empty
+  (Just lst, count) -> fromWord64sWithLastAndCount lst count ws
+  (Nothing, _)      -> empty
 
 toWord64s :: EliasFano -> [Word64]
 toWord64s ef = uncurry combine <$> zip (bucketBitsToHiSegment bucketBits) (PV.toList (efLoSegments ef))
