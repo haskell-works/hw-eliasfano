@@ -26,4 +26,6 @@ cabal.sandbox.config
 /stack-ci.yaml
 /.ghc.environment.*
 /.bin
+/*.hi
+/*.lo
 
