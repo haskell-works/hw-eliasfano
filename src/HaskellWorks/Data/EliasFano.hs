@@ -11,7 +11,6 @@ module HaskellWorks.Data.EliasFano
   ) where
 
 import Control.DeepSeq
-import Data.Bits                                 (countLeadingZeros, finiteBitSize)
 import Data.Word
 import GHC.Generics
 import HaskellWorks.Data.AtIndex                 hiding (end)
@@ -47,7 +46,7 @@ empty = EliasFano
 
 fromWord64s :: [Word64] -> EliasFano
 fromWord64s ws = case foldCountAndLast ws of
-  (Just end', count) -> EliasFano
+  (Just end', _) -> EliasFano
     { efBucketBits  = DVS.fromList $ hiSegmentToWords his
     , efLoSegments  = PV.fromList loBits' los
     , efLoBitCount  = loBits'
@@ -59,8 +58,6 @@ fromWord64s ws = case foldCountAndLast ws of
           loMask    = comp hiMask :: Word64
           his       = (.>. loBits') . (.&. hiMask) <$> ws
           los       = (.&. loMask) <$> ws
-          hiEnd     = end' .>. loBits'
-          bucketEnd = 1 .<. fromIntegral (finiteBitSize hiEnd - countLeadingZeros hiEnd) :: Word64
   (Nothing, _) -> empty
 
 toWord64s :: EliasFano -> [Word64]
