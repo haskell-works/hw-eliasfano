@@ -57,11 +57,11 @@ bucketWordsToBucketBools n v = fst (DVS.foldl go (id, n) v) []
 hiSegmentToWords :: [Word64] -> [Word64]
 hiSegmentToWords = go 0 0 0
   where go :: Count -> Word64 -> Word64 -> [Word64] -> [Word64]
-        go n acc last us@(v:vs) = if n < 64
-          then if last < v
-            then go (n + 1)  acc                (last + 1) us
-            else go (n + 1) (acc .|. (1 .<. n))  v         vs
-          else acc:go 0 0 last us
+        go n acc lst us@(v:vs) = if n < 64
+          then if lst < v
+            then go (n + 1)  acc                (lst + 1) us
+            else go (n + 1) (acc .|. (1 .<. n))  v        vs
+          else acc:go 0 0 lst us
         go 0 _   _    _         = []
         go _ acc _    _         = [acc]
 
