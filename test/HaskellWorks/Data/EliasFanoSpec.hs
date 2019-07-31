@@ -7,6 +7,7 @@ import HaskellWorks.Data.AtIndex
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.EliasFano
 import HaskellWorks.Data.EliasFano.Internal
+import HaskellWorks.Data.RankSelect.CsPoppy
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
@@ -24,7 +25,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     ws <- forAll $ pure $ [2, 3, 5, 7, 11, 13, 24]
     let actual = fromWord64s ws
     let expected = EliasFano
-          { efBucketBits  = DVS.fromList [4443]
+          { efBucketBits  = makeCsPoppy (DVS.fromList [4443])
           , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
           , efLoBitCount  = 2
           , efCount       = 7
@@ -37,7 +38,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     bucketBitsToHiSegment (hiSegmentToBucketBits maxW ws) === ws
   it "List to EliasFano" $ requireTest $ do
     ws <- forAll $ pure $ EliasFano
-          { efBucketBits  = DVS.fromList [4443]
+          { efBucketBits  = makeCsPoppy (DVS.fromList [4443])
           , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
           , efLoBitCount  = 2
           , efCount       = 7
@@ -76,7 +77,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     actual === (ws :: [Word64])
   it "atIndex" $ requireTest $ do
     ef <- forAll $ pure $ EliasFano
-          { efBucketBits  = DVS.fromList [4443]
+          { efBucketBits  = makeCsPoppy (DVS.fromList [4443])
           , efLoSegments  = PV.fromList 2 [2, 3, 1, 3, 3, 1, 0]
           , efLoBitCount  = 2
           , efCount       = 7
