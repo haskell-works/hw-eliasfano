@@ -76,6 +76,8 @@ executable hw-eliasfano
           , hw-bits
           , hw-packed-vector
           , hw-prim
+          , hw-rankselect
+          , hw-rankselect-base
           , lens
           , optparse-applicative
           , resourcet
@@ -103,6 +105,8 @@ test-suite hw-eliasfano-test
           , hw-int
           , hw-packed-vector
           , hw-prim
+          , hw-rankselect
+          , hw-rankselect-base
           , vector
   type:               exitcode-stdio-1.0
   main-is:            Spec.hs

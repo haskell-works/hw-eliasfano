@@ -9,9 +9,10 @@ module App.Commands.LoadSave
 import App.Codec
 import Control.Lens
 import Data.Generics.Product.Any
-import Data.Semigroup            ((<>))
+import Data.Semigroup                       ((<>))
 import Data.Word
-import Options.Applicative       hiding (columns)
+import HaskellWorks.Data.RankSelect.CsPoppy
+import Options.Applicative                  hiding (columns)
 
 import qualified App.Commands.Types                            as Z
 import qualified Data.ByteString.Lazy                          as LBS
@@ -28,9 +29,8 @@ runLoadSave opts = do
   lbs <- LBS.readFile (opts ^. the @"input")
   let ws = fmap fromIntegral (decodeWord32s lbs) :: [Word64]
   let ef = EF.fromWord64s ws :: EF.EliasFano
-  -- let x = DVS.length (PV.swBuffer (EF.efCount ef))
   IO.putStrLn $ "Eliasfano:"
-    <> " bits: "  <> show (ef & EF.efBucketBits & DVS.length                )
+    <> " bits: "  <> show (ef & EF.efBucketBits & csPoppyBits & DVS.length  )
     <> " count: " <> show (ef & EF.efLoSegments & PV.swBuffer & DVS.length  )
     <> " pv: "    <> show (ef & EF.efCount                                  )
     <> " lbc: "   <> show (ef & EF.efLoBitCount                             )
