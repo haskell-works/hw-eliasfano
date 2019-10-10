@@ -26,7 +26,8 @@ import qualified System.IO                                     as IO
 
 runLoadSave :: Z.LoadSaveOptions -> IO ()
 runLoadSave opts = do
-  lbs <- LBS.readFile (opts ^. the @"input")
+  let input = opts ^. the @"output"
+  lbs <- LBS.readFile input
   let ws = fmap fromIntegral (decodeWord32s lbs) :: [Word64]
   let ef = EF.fromWord64s ws :: EF.EliasFano
   IO.putStrLn $ "Eliasfano:"
