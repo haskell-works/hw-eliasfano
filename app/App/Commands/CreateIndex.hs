@@ -11,7 +11,6 @@ import Control.Lens
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Resource
 import Data.Generics.Product.Any
-import Data.Semigroup                          ((<>))
 import Data.Word
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Log2

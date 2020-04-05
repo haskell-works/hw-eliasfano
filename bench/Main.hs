@@ -4,7 +4,6 @@
 module Main where
 
 import Criterion.Main
-import Data.Monoid                         ((<>))
 import Foreign                             hiding ((.&.))
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.EliasFano
