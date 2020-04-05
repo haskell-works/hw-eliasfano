@@ -9,7 +9,6 @@ module App.Commands.LoadSave
 import App.Codec
 import Control.Lens
 import Data.Generics.Product.Any
-import Data.Semigroup                       ((<>))
 import Data.Word
 import HaskellWorks.Data.RankSelect.CsPoppy
 import Options.Applicative                  hiding (columns)

@@ -2,7 +2,6 @@ module App.Codec
   ( decodeWord32s
   ) where
 
-import Data.Semigroup ((<>))
 import Data.Word
 
 import qualified Data.Binary.Get      as G
