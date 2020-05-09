@@ -20,8 +20,8 @@ import qualified HaskellWorks.Data.EliasFano                   as EF
 import qualified HaskellWorks.Data.PackedVector.PackedVector64 as PV
 import qualified System.IO                                     as IO
 
-{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
-{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
+{- HLINT ignore "Redundant do"        -}
+{- HLINT ignore "Reduce duplication"  -}
 
 runLoadSave :: Z.LoadSaveOptions -> IO ()
 runLoadSave opts = do

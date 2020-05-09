@@ -26,8 +26,8 @@ import qualified System.Exit                          as IO
 import qualified System.IO                            as IO
 import qualified System.IO.Temp                       as RIO
 
-{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
-{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
+{- HLINT ignore "Redundant do"        -}
+{- HLINT ignore "Reduce duplication"  -}
 
 readWord32s :: MonadIO m => FilePath -> m [Word32]
 readWord32s fp = do
