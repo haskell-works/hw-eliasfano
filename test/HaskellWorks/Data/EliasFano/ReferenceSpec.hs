@@ -16,7 +16,7 @@ import qualified Hedgehog.Range as R
 spec :: Spec
 spec = describe "HaskellWorks.Data.EliasFano.ReferenceSpec" $ do
   it "List to EliasFano" $ require $ withTests 1 $ property $ do
-    ws <- forAll $ pure $ [2, 3, 5, 7, 11, 13, 24]
+    ws <- forAll $ pure [2, 3, 5, 7, 11, 13, 24]
     let actual = fromWord64s ws
     let expected = EliasFano
           { efBucketBits  = [ True

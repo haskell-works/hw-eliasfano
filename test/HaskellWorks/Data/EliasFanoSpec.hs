@@ -22,7 +22,7 @@ import qualified Hedgehog.Range                                as R
 spec :: Spec
 spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
   it "List to EliasFano" $ requireTest $ do
-    ws <- forAll $ pure $ [2, 3, 5, 7, 11, 13, 24]
+    ws <- forAll $ pure [2, 3, 5, 7, 11, 13, 24]
     let actual = fromWord64s ws
     let expected = EliasFano
           { efBucketBits  = makeCsPoppy (DVS.fromList [4443])
@@ -86,7 +86,7 @@ spec = describe "HaskellWorks.Data.EliasFanoSpec" $ do
     let expected = [2, 3, 5, 7, 11, 13, 24]
     actual === expected
   it "hiSegmentToWords" $ requireTest $ do
-    ws <- forAll $ pure $ [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
+    ws <- forAll $ pure [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
 
     filter (/= ' ') (bitShow (hiSegmentToWords ws)) === concat
       [ "01101010", "01000100", "00010000", "00001000", "00000000", "00100000", "00000000", "00000000"
