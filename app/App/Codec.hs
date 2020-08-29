@@ -13,6 +13,4 @@ decodeWord32s = fmap (G.runGet G.getWord32le) . go
         go lbs = case LBS.splitAt 4 lbs of
           (lt, rt) -> if LBS.length lt == 4
             then lt:go rt
-            else if LBS.length lt == 0
-              then []
-              else [LBS.take 4 (lt <> LBS.replicate 4 0)]
+            else [LBS.take 4 (lt <> LBS.replicate 4 0) | LBS.length lt /= 0]
